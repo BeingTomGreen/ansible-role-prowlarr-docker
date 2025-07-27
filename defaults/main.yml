@@ -1,0 +1,48 @@
+---
+
+# Environment variables for Prowlarr
+# See https://docs.linuxserver.io/images/docker-prowlarr/
+prowlarr_docker_environment:
+  PUID: '1000'
+  PGID: '1000'
+  TZ: 'Etc/UTC'
+
+# Volume mappings
+# If you use a named volume, it will be attached as an external volume and must already exist
+prowlarr_docker_volumes:
+  - "{{ prowlarr_docker_base_dir }}/config:/config"
+
+# The ports to pass through, can be an empty list if you don't need to expose ports
+prowlarr_docker_ports:
+  - '9696:9696'
+
+# User that will run Prowlarr
+prowlarr_docker_user: "{{ ansible_user }}"
+
+# Base path for deployment
+prowlarr_docker_base_dir: '/srv/prowlarr_docker'
+
+# Docker image
+prowlarr_docker_image: 'lscr.io/linuxserver/prowlarr:latest'
+
+# Docker container name
+prowlarr_docker_container_name: 'prowlarr'
+
+# Networks to attach the container to
+prowlarr_docker_networks: []
+# Example:
+# prowlarr_docker_networks:
+#  - "mediarr"
+
+# Optional depends on
+prowlarr_docker_depends_on: []
+
+# Define our restart policy
+prowlarr_docker_restart_policy: 'unless-stopped'
+
+# Define labels for the Prowlarr container
+prowlarr_docker_labels: []
+# Example:
+# prowlarr_docker_labels:
+#  - traefik.enable=true
+#  - traefik.http.routers.traefik-https.entrypoints=https

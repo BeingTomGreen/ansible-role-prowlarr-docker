@@ -1,0 +1,48 @@
+#jinja2: trim_blocks: "true", lstrip_blocks: "true"
+{{ ansible_managed | comment() }}
+
+services:
+  prowlarr:
+    image: {{ prowlarr_docker_image }}
+    container_name: {{ prowlarr_docker_container_name }}
+    restart: {{ prowlarr_docker_restart_policy }}
+    {% if prowlarr_docker_ports | length > 0 %}
+    ports:
+      {% for port in prowlarr_docker_ports %}
+      - {{ port }}
+      {% endfor %}
+    {% endif %}
+    {% if prowlarr_docker_networks | length > 0 %}
+    networks:
+      {% for net in prowlarr_docker_networks %}
+      - {{ net }}
+      {% endfor %}
+    {% endif %}
+    volumes:
+      {% for vol in prowlarr_docker_volumes %}
+      - {{ vol }}
+      {% endfor %}
+    environment:
+      {% for key, value in prowlarr_docker_environment.items() %}
+      {{ key }}: "{{ value }}"
+      {% endfor %}
+    {% if prowlarr_docker_depends_on %}
+    depends_on:
+      {% for dep in prowlarr_docker_depends_on %}
+      - {{ dep }}
+      {% endfor %}
+    {% endif %}
+    {% if prowlarr_docker_labels %}
+    labels:
+      {% for label in prowlarr_docker_labels %}
+      - {{ label }}
+      {% endfor %}
+    {% endif %}
+{% if prowlarr_docker_networks | length > 0 %}
+
+networks:
+  {% for net in prowlarr_docker_networks %}
+  {{ net }}:
+    external: true
+  {% endfor %}
+{% endif %}
