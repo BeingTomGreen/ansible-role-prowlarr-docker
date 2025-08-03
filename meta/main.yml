@@ -2,7 +2,7 @@
 
 galaxy_info:
   author: Tom Green
-  description: A simple role for running Prowlarr via Docker compose.
+  description: A simple ansible role for running Prowlarr via Docker compose using the LinuxServer.io Prowlarr image
 
   role_name: prowlarr_docker
   namespace: beingtomgreen

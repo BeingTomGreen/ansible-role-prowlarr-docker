@@ -1,48 +1,92 @@
 ---
 
-# Environment variables for Prowlarr
-# See https://docs.linuxserver.io/images/docker-prowlarr/
-prowlarr_docker_environment:
-  PUID: '1000'
-  PGID: '1000'
-  TZ: 'Etc/UTC'
+# Specifies container capabilities to add/drop
+# See: https://man7.org/linux/man-pages/man7/capabilities.7.html
+prowlarr_docker_cap_add: []
+prowlarr_docker_cap_drop: []
 
-# Volume mappings
-# If you use a named volume, it will be attached as an external volume and must already exist
-prowlarr_docker_volumes:
-  - "{{ prowlarr_docker_base_dir }}/config:/config"
-
-# The ports to pass through, can be an empty list if you don't need to expose ports
-prowlarr_docker_ports:
-  - '9696:9696'
-
-# User that will run Prowlarr
-prowlarr_docker_user: "{{ ansible_user }}"
-
-# Base path for deployment
-prowlarr_docker_base_dir: '/srv/prowlarr_docker'
-
-# Docker image
-prowlarr_docker_image: 'lscr.io/linuxserver/prowlarr:latest'
-
-# Docker container name
+# Set container name
 prowlarr_docker_container_name: 'prowlarr'
 
-# Networks to attach the container to
-prowlarr_docker_networks: []
-# Example:
-# prowlarr_docker_networks:
-#  - "mediarr"
-
-# Optional depends on
+# Set services container depends on
 prowlarr_docker_depends_on: []
 
-# Define our restart policy
-prowlarr_docker_restart_policy: 'unless-stopped'
+# Set container devices
+# See: https://docs.linuxserver.io/images/docker-prowlarr/#hardware-acceleration
+prowlarr_docker_devices: []
+# Example:
+# prowlarr_docker_devices:
+# - '/dev/dri:/dev/dri'
+# - '/dev/kfd:/dev/kfd'
 
-# Define labels for the Prowlarr container
+# Set container PUID and PGID
+# See https://docs.linuxserver.io/general/understanding-puid-and-pgid/
+prowlarr_docker_env_puid: 1000
+prowlarr_docker_env_pgid: 1000
+
+# Set container timezone env
+prowlarr_docker_env_timezone: 'Etc/UTC'
+
+# Set additional Prowlarr envs
+# Additional container environment variables
+prowlarr_docker_extra_environment_vars: []
+# Example:
+# prowlarr_docker_extra_environment_vars:
+#   SOME_OTHER_VAR: 'A_VALUE'
+
+# Set container image options
+prowlarr_docker_image: 'lscr.io/linuxserver/prowlarr'
+prowlarr_docker_image_tag: 'latest'
+
+# Set container labels
 prowlarr_docker_labels: []
 # Example:
 # prowlarr_docker_labels:
-#  - traefik.enable=true
-#  - traefik.http.routers.traefik-https.entrypoints=https
+#  traefik.enable: 'true'
+#  traefik.http.routers.traefik-https.entrypoints: 'https'
+
+# Set container network mode
+# Can be: null (if using port mapping/networks) 'none', 'host', 'service:<service-name>' or 'container:<container-name>'
+# prowlarr_docker_network_mode will need to be null if you want to specify ports etc
+prowlarr_docker_network_mode:
+
+# Set container external networks
+prowlarr_docker_external_networks: []
+# Example:
+# prowlarr_docker_external_networks:
+#  - 'mediarr'
+
+# Set container ports
+prowlarr_docker_ports:
+  - '9696:9696'
+
+# Set container pull policy
+# See: https://docs.docker.com/reference/compose-file/services/#pull_policy
+# Can be: always, never, missing, build, daily, weekly, every_<duration>
+prowlarr_docker_pull_policy: 'missing'
+
+# Set container restart policy
+prowlarr_docker_restart_policy: 'unless-stopped'
+
+# Set container runtime
+prowlarr_docker_runtime: 'runc'
+
+# Set additional container volumes
+prowlarr_docker_additional_volumes: []
+# Example:
+# prowlarr_docker_additional_volumes:
+# - '/path/to/tv:/tv'
+# - '/path/to/movies:/movies'
+# - '/path/to/music:/music'
+# - '/path/to/usenet:/usenet'
+# - '/path/to/torrents:/torrents'
+
+# User that will own the compose files
+prowlarr_docker_user: "{{ ansible_user }}"
+
+# Base path for deployment
+prowlarr_docker_base_directory: '/srv/prowlarr_docker'
+
+# Control image pruning
+prowlarr_docker_prune_images: 'false'
+prowlarr_docker_prune_until: '72h'
