@@ -103,7 +103,7 @@ Seriously, take a look at [`defaults/main.yml`](defaults/main.yml), it's obnoxio
 
     prowlarr_docker_base_directory: '/opt/prowlarr_docker'
 
-    prowlarr_docker_update_image: True
+    prowlarr_docker_update_image: true
 
   roles:
     - role: beingtomgreen.prowlarr_docker

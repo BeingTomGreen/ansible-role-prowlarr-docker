@@ -88,4 +88,4 @@ prowlarr_docker_user: "{{ ansible_user }}"
 prowlarr_docker_base_directory: '/srv/prowlarr_docker'
 
 # Control Image updates
-prowlarr_docker_update_image: False
+prowlarr_docker_update_image: false
