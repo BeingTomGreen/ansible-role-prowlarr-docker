@@ -1,76 +1,114 @@
 #jinja2: trim_blocks: True, lstrip_blocks: True
 
-services:
-  prowlarr:
-    {% if prowlarr_docker_cap_add | length > 0 %}
-    cap_add:
-      {% for capability in prowlarr_docker_cap_add %}
-      - {{ capability }}
-      {% endfor %}
-    {% endif %}
-    {% if prowlarr_docker_cap_drop | length > 0 %}
-    cap_drop:
-      {% for capability in prowlarr_docker_cap_drop %}
-      - {{ capability }}
-      {% endfor %}
-    {% endif %}
-    container_name: {{ prowlarr_docker_container_name }}
-    {% if prowlarr_docker_depends_on | length > 0 %}
-    depends_on:
-      {% for dep in prowlarr_docker_depends_on %}
-      - {{ dep }}
-      {% endfor %}
-    {% endif %}
-    {% if prowlarr_docker_devices %}
-    devices:
-      {% for device in prowlarr_docker_devices %}
-      - {{ device }}
-      {% endfor %}
-    {% endif %}
-    environment:
-      PUID: "{{ prowlarr_docker_env_puid }}"
-      PGID: "{{ prowlarr_docker_env_pgid }}"
-      TZ: "{{ prowlarr_docker_env_timezone }}"
-      {% if prowlarr_docker_extra_environment_vars | length > 0 %}
-      {% for env, value in prowlarr_docker_extra_environment_vars.items() %}
-      {{ env }}: "{{ value }}"
-      {% endfor %}
-      {% endif %}
-    image: {{ prowlarr_docker_image }}:{{ prowlarr_docker_image_tag }}
-    {% if prowlarr_docker_labels | length > 0 %}
-    labels:
-      {% for label, value in prowlarr_docker_labels.items() %}
-      {{ label }}: "{{ value }}"
-      {% endfor %}
-    {% endif %}
-    {% if prowlarr_docker_external_networks | length > 0 and not (prowlarr_docker_network_mode | default('')) %}
-    networks:
-      {% for net in prowlarr_docker_external_networks %}
-      - {{ net }}
-      {% endfor %}
-    {% elif prowlarr_docker_network_mode %}
-    network_mode: {{ prowlarr_docker_network_mode | default('host') }}
-    {% endif %}
-    {% if prowlarr_docker_ports | length > 0 and not (prowlarr_docker_network_mode | default('')) %}
-    ports:
-      {% for port in prowlarr_docker_ports %}
-      - {{ port }}
-      {% endfor %}
-    {% endif %}
-    pull_policy: {{ prowlarr_docker_pull_policy }}
-    restart: {{ prowlarr_docker_restart_policy }}
-    volumes:
-      - {{ prowlarr_docker_base_directory }}/config:/config
-      {% if prowlarr_docker_additional_volumes | length > 0 %}
-      {% for vol in prowlarr_docker_additional_volumes %}
-      - {{ vol }}
-      {% endfor %}
-      {% endif %}
-{% if prowlarr_docker_external_networks | length > 0 and not (prowlarr_docker_network_mode | default('')) %}
+---
 
+services:
+  {{ prowlarr_docker_service_name }}:
+{% if prowlarr_docker_cpu_count %}
+    cpu_count: {{ prowlarr_docker_cpu_count }}
+{% endif %}
+{% if prowlarr_docker_cpu_percentage %}
+    cpu_percent: {{ prowlarr_docker_cpu_percentage }}
+{% endif %}
+{% if prowlarr_docker_cpu_shares %}
+    cpu_shares: {{ prowlarr_docker_cpu_shares }}
+{% endif %}
+{% if prowlarr_docker_cpu_period %}
+    cpu_period: {{ prowlarr_docker_cpu_period }}
+{% endif %}
+{% if prowlarr_docker_cpu_quota %}
+    cpu_quota: {{ prowlarr_docker_cpu_quota }}
+{% endif %}
+{% if prowlarr_docker_cpu_rt_runtime %}
+    cpu_rt_runtime: {{ prowlarr_docker_cpu_rt_runtime }}
+{% endif %}
+{% if prowlarr_docker_cpu_rt_period %}
+    cpu_rt_period: {{ prowlarr_docker_cpu_rt_period }}
+{% endif %}
+{% if prowlarr_docker_cpus %}
+    cpus: {{ prowlarr_docker_cpus }}
+{% endif %}
+{% if prowlarr_docker_cpuset %}
+    cpuset: {{ prowlarr_docker_cpuset }}
+{% endif %}
+{% if prowlarr_docker_cap_add %}
+    cap_add:
+{{ prowlarr_docker_cap_add | to_nice_yaml(indent=2) | indent(6, first=True) }}
+{% endif %}
+{% if prowlarr_docker_cap_drop %}
+    cap_drop:
+{{ prowlarr_docker_cap_drop | to_nice_yaml(indent=2) | indent(6, first=True) }}
+{% endif %}
+{% if prowlarr_docker_container_name %}
+    container_name: {{ prowlarr_docker_container_name }}
+{% endif %}
+{% if prowlarr_docker_devices %}
+    devices:
+{{ prowlarr_docker_devices | to_nice_yaml(indent=2) | indent(6, first=True) }}
+{% endif %}
+{% if prowlarr_docker_dns %}
+    dns: {{ prowlarr_docker_dns if prowlarr_docker_dns is string else prowlarr_docker_dns | to_yaml }}
+{% endif %}
+{% if prowlarr_docker_dns_opt %}
+    dns_opt: {{ prowlarr_docker_dns_opt if prowlarr_docker_dns_opt is string else prowlarr_docker_dns_opt | to_yaml }}
+{% endif %}
+{% if prowlarr_docker_dns_search %}
+    dns_search: {{ prowlarr_docker_dns_search if prowlarr_docker_dns_search is string else prowlarr_docker_dns_search | to_yaml }}
+{% endif %}
+{% if prowlarr_docker_domainname %}
+    domainname: {{ prowlarr_docker_domainname }}
+{% endif %}
+    environment:
+{{ prowlarr_docker_environment | to_nice_yaml(indent=2) | indent(6, first=True) }}
+{% if prowlarr_docker_hostname %}
+    hostname: {{ prowlarr_docker_hostname }}
+{% endif %}
+    image: {{ prowlarr_docker_image }}
+{% if prowlarr_docker_labels %}
+    labels:
+{{ prowlarr_docker_labels | to_nice_yaml(indent=2) | indent(6, first=True) }}
+{% endif %}
+{% if prowlarr_docker_mem_limit %}
+    mem_limit: {{ prowlarr_docker_mem_limit }}
+{% endif %}
+{% if prowlarr_docker_mem_reservation %}
+    mem_reservation: {{ prowlarr_docker_mem_reservation }}
+{% endif %}
+{% if prowlarr_docker_mem_swappiness %}
+    mem_swappiness: {{ prowlarr_docker_mem_swappiness }}
+{% endif %}
+{% if prowlarr_docker_memswap_limit %}
+    memswap_limit: {{ prowlarr_docker_memswap_limit }}
+{% endif %}
+{% if prowlarr_docker_network_mode %}
+    network_mode: {{ prowlarr_docker_network_mode }}
+{% endif %}
+{% if prowlarr_docker_networks %}
+    networks:
+{{ prowlarr_docker_networks | to_nice_yaml(indent=2) | indent(6, first=True) }}
+{% endif %}
+{% if prowlarr_docker_ports %}
+    ports:
+{{ prowlarr_docker_ports | to_nice_yaml(indent=2) | indent(6, first=True) }}
+{% endif %}
+{% if prowlarr_docker_pull_policy %}
+    pull_policy: {{ prowlarr_docker_pull_policy }}
+{% endif %}
+{% if prowlarr_docker_restart_policy %}
+    restart: {{ prowlarr_docker_restart_policy }}
+{% endif %}
+{% if prowlarr_docker_runtime %}
+    runtime: {{ prowlarr_docker_runtime }}
+{% endif %}
+{% if prowlarr_docker_volumes %}
+    volumes:
+{{ prowlarr_docker_volumes | to_nice_yaml(indent=2) | indent(6, first=True) }}
+{% endif %}
+
+{% if prowlarr_docker_networks %}
 networks:
-  {% for net in prowlarr_docker_external_networks %}
-  {{ net }}:
+{% for network in prowlarr_docker_networks %}
+  {{ network }}:
     external: true
-  {% endfor %}
+{% endfor %}
 {% endif %}
